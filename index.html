@@ -29,68 +29,29 @@
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
-    a{color:inherit}
-    .app{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-    }
+    .app{min-height:100%;display:flex;flex-direction:column}
     header{
       padding:18px 16px 10px;
       border-bottom:1px solid var(--line);
       background:linear-gradient(180deg, rgba(166,206,57,.14), rgba(166,206,57,0));
     }
     .header-inner{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
+      max-width:1100px;margin:0 auto;
+      display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
     }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .brand h1{
-      margin:0;
-      font-size:18px;
-      letter-spacing:.2px;
-    }
-    .brand p{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-    }
+    .brand{display:flex;flex-direction:column;gap:6px}
+    .brand h1{margin:0;font-size:18px;letter-spacing:.2px}
+    .brand p{margin:0;color:var(--muted);font-size:13px;line-height:1.4}
     .hint{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-      padding-top:2px;
+      display:flex;gap:8px;align-items:center;
+      color:var(--muted);font-size:12px;white-space:nowrap;padding-top:2px
     }
-    .dot{
-      width:9px;height:9px;border-radius:999px;background:var(--green);
-      box-shadow:0 0 0 4px rgba(166,206,57,.18);
-      flex:0 0 auto;
-    }
-
+    .dot{width:9px;height:9px;border-radius:999px;background:var(--green);box-shadow:0 0 0 4px rgba(166,206,57,.18)}
     main{
-      max-width:1100px;
-      width:100%;
-      margin:0 auto;
+      max-width:1100px;width:100%;margin:0 auto;
       padding:14px 16px 22px;
-      display:grid;
-      grid-template-columns: 1.25fr .9fr;
-      gap:14px;
-      flex:1;
+      display:grid;grid-template-columns: 1.25fr .9fr;gap:14px;flex:1
     }
-
-    /* Map card */
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -98,78 +59,29 @@
       box-shadow: var(--shadow);
       overflow:hidden;
     }
-    .map-card{
-      position:relative;
-      min-height:480px;
-    }
+    .map-card{position:relative;min-height:480px}
     .map-topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding:12px 12px 10px;
-      border-bottom:1px solid var(--line);
-      background:rgba(255,255,255,.75);
-      backdrop-filter: blur(6px);
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      padding:12px 12px 10px;border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.75);backdrop-filter: blur(6px);
     }
-    .map-title{
-      display:flex; flex-direction:column; gap:2px;
-    }
+    .map-title{display:flex;flex-direction:column;gap:2px}
     .map-title strong{font-size:13px}
     .map-title span{font-size:12px;color:var(--muted)}
-    .map-tools{
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
+    .map-tools{display:flex;gap:8px;align-items:center}
     .btn{
-      appearance:none;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--text);
-      border-radius:12px;
-      padding:10px 12px;
-      font-size:13px;
-      cursor:pointer;
+      appearance:none;border:1px solid var(--line);background:#fff;color:var(--text);
+      border-radius:12px;padding:10px 12px;font-size:13px;cursor:pointer;
       transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
-      box-shadow: 0 4px 12px rgba(15,23,42,.06);
-      user-select:none;
+      box-shadow: 0 4px 12px rgba(15,23,42,.06);user-select:none;
     }
     .btn:active{transform: translateY(1px)}
-    .btn.primary{
-      border-color: rgba(166,206,57,.35);
-      background: rgba(166,206,57,.16);
-    }
-    .btn.icon{
-      width:40px;
-      height:40px;
-      display:grid;
-      place-items:center;
-      padding:0;
-      font-weight:700;
-    }
+    .btn.primary{border-color: rgba(166,206,57,.35);background: rgba(166,206,57,.16)}
+    .btn.icon{width:40px;height:40px;display:grid;place-items:center;padding:0;font-weight:700}
     .btn:focus{outline: 3px solid rgba(59,130,246,.25); outline-offset:2px}
-
-    .map-stage{
-      position:absolute;
-      inset:56px 0 0 0;
-      display:grid;
-      place-items:center;
-      background:#fff;
-    }
-    #mapContainer{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      touch-action:none; /* svg-pan-zoom uses pointer/touch */
-    }
-    .loader{
-      display:flex; flex-direction:column; gap:10px;
-      align-items:center; justify-content:center;
-      color:var(--muted);
-      font-size:13px;
-      padding:18px;
-    }
+    .map-stage{position:absolute;inset:56px 0 0 0;display:grid;place-items:center;background:#fff}
+    #mapContainer{width:100%;height:100%;overflow:hidden;touch-action:none}
+    .loader{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;color:var(--muted);font-size:13px;padding:18px}
     .spinner{
       width:28px;height:28px;border-radius:999px;
       border:3px solid rgba(15,23,42,.12);
@@ -177,15 +89,7 @@
       animation: spin 1s linear infinite;
     }
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* Geolonia SVG styling */
-    .geolonia-svg-map{
-      width:100%;
-      height:100%;
-      display:block;
-      background:#fff;
-    }
-    /* prefecture group */
+    .geolonia-svg-map{width:100%;height:100%;display:block;background:#fff}
     .geolonia-svg-map .prefecture{
       fill: var(--green);
       stroke: var(--stroke);
@@ -196,8 +100,6 @@
     }
     .geolonia-svg-map .prefecture:hover{ fill: var(--greenHover); }
     .geolonia-svg-map .prefecture.active{ fill: var(--greenActive); }
-
-    /* boundary lines if present */
     .geolonia-svg-map .boundary-line{
       stroke: var(--stroke);
       stroke-width: 1;
@@ -205,111 +107,32 @@
       pointer-events:none;
     }
 
-    /* Info panel */
-    .info-card{
-      display:flex;
-      flex-direction:column;
-      min-height:480px;
-    }
-    .info-head{
-      padding:14px 14px 10px;
-      border-bottom:1px solid var(--line);
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .badge .pin{
-      width:8px;height:8px;border-radius:999px;background:var(--green);
-      box-shadow:0 0 0 4px rgba(166,206,57,.16);
-    }
-    .pref-name{
-      margin:10px 0 2px;
-      font-size:20px;
-      letter-spacing:.2px;
-    }
-    .pref-sub{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.5;
-    }
-    .info-body{
-      padding:12px 14px 14px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      flex:1;
-    }
-    .section{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:12px 12px;
-      background: #fff;
-    }
-    .section h3{
-      margin:0 0 8px;
-      font-size:13px;
-      color: var(--text);
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .section h3 small{
-      font-weight:600;
-      color: var(--muted);
-    }
-    ul{
-      margin:0;
-      padding-left:18px;
-      color: var(--text);
-      font-size:13px;
-      line-height:1.55;
-    }
+    .info-card{display:flex;flex-direction:column;min-height:480px}
+    .info-head{padding:14px 14px 10px;border-bottom:1px solid var(--line)}
+    .badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+    .badge .pin{width:8px;height:8px;border-radius:999px;background:var(--green);box-shadow:0 0 0 4px rgba(166,206,57,.16)}
+    .pref-name{margin:10px 0 2px;font-size:20px;letter-spacing:.2px}
+    .pref-sub{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+    .info-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:12px;flex:1}
+    .section{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+    .section h3{margin:0 0 8px;font-size:13px;color:var(--text);display:flex;align-items:center;gap:8px}
+    .section h3 small{font-weight:600;color:var(--muted)}
+    ul{margin:0;padding-left:18px;color:var(--text);font-size:13px;line-height:1.55}
     li{margin:4px 0}
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top:auto;
-      padding-top:4px;
-      flex-wrap:wrap;
-    }
-    .actions .btn{
-      flex:1 1 170px;
-      justify-content:center;
-      text-align:center;
-    }
+    .actions{display:flex;gap:10px;margin-top:auto;padding-top:4px;flex-wrap:wrap}
+    .actions .btn{flex:1 1 170px;justify-content:center;text-align:center}
+    footer{max-width:1100px;width:100%;margin:0 auto;padding:0 16px 18px;color:var(--muted);font-size:12px;line-height:1.5}
+    code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
 
-    footer{
-      max-width:1100px;
-      width:100%;
-      margin:0 auto;
-      padding:0 16px 18px;
-      color: var(--muted);
-      font-size:12px;
-      line-height:1.5;
-    }
-
-    /* Mobile layout */
     @media (max-width: 920px){
       main{grid-template-columns: 1fr; }
       .map-card{min-height:420px}
       .info-card{min-height:auto}
     }
 
-    /* Bottom sheet (mobile) */
     .sheet-backdrop{
-      position:fixed;
-      inset:0;
-      background: rgba(2,6,23,.45);
-      display:none;
-      align-items:flex-end;
-      justify-content:center;
-      padding:12px;
-      z-index:50;
+      position:fixed;inset:0;background: rgba(2,6,23,.45);
+      display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:50;
     }
     .sheet{
       width:min(720px, 100%);
@@ -321,17 +144,11 @@
       box-shadow: 0 18px 50px rgba(2,6,23,.35);
     }
     .sheet .sheet-top{
-      position:sticky;
-      top:0;
-      background: rgba(255,255,255,.92);
+      position:sticky;top:0;background: rgba(255,255,255,.92);
       backdrop-filter: blur(8px);
       border-bottom:1px solid var(--line);
       padding:10px 12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      z-index:1;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;z-index:1;
     }
     .sheet .close{
       border:1px solid var(--line);
@@ -339,12 +156,9 @@
       border-radius:12px;
       width:40px;height:40px;
       display:grid;place-items:center;
-      cursor:pointer;
-      font-size:18px;
+      cursor:pointer;font-size:18px;
     }
-    .sheet .content{
-      padding:12px;
-    }
+    .sheet .content{padding:12px}
     .show{display:flex}
   </style>
 </head>
@@ -364,7 +178,6 @@
     </header>
 
     <main>
-      <!-- MAP -->
       <section class="card map-card" aria-label="日本地図">
         <div class="map-topbar">
           <div class="map-title">
@@ -387,7 +200,6 @@
         </div>
       </section>
 
-      <!-- INFO (desktop panel) -->
       <aside class="card info-card" aria-label="都道府県の観光情報" id="infoPanel">
         <div class="info-head">
           <div class="badge"><span class="pin"></span><span>いまの気分に合う旅先を探そう</span></div>
@@ -417,12 +229,11 @@
     <footer>
       <div>
         ※地図は外部SVG（GitHub上の公開データ）を読み込んで表示します。<br/>
-        ※ダミーデータはこのHTML内の <code>PREF_DATA</code> を編集して差し替えできます。
+        ※県ごとのデータはこのHTML内の <code>PREF_DATA</code> を編集して差し替えできます（名所/グルメ）。
       </div>
     </footer>
   </div>
 
-  <!-- Bottom sheet (mobile) -->
   <div class="sheet-backdrop" id="sheetBackdrop" role="dialog" aria-modal="true" aria-label="都道府県の観光情報（モバイル）">
     <div class="sheet">
       <div class="sheet-top">
@@ -436,12 +247,11 @@
     </div>
   </div>
 
-  <!-- svg-pan-zoom -->
   <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
 
   <script>
     /***********************
-     * 1) 都道府県マスタ
+     * 1) 都道府県コード ↔ 名前
      ***********************/
     const PREF_LIST = [
       ["01","北海道"],["02","青森県"],["03","岩手県"],["04","宮城県"],["05","秋田県"],["06","山形県"],["07","福島県"],
@@ -454,55 +264,68 @@
       ["40","福岡県"],["41","佐賀県"],["42","長崎県"],["43","熊本県"],["44","大分県"],["45","宮崎県"],["46","鹿児島県"],
       ["47","沖縄県"]
     ];
-
     const CODE_TO_NAME = Object.fromEntries(PREF_LIST);
 
     /****************************************************************
-     * 2) 観光データ（ダミー）
-     *  - ここを後であなたが好きな内容に差し替えできます
-     *  - 表示は【名所】【グルメ】のみ（必要なら "hidden" も活用OK）
+     * 2) 47都道府県ぶんのデータ（名所3・グルメ3）
+     *    ここだけ編集すればOK！
      ****************************************************************/
-    const PREF_DATA = (() => {
-      const obj = {};
-      for (const [, name] of PREF_LIST) {
-        obj[name] = {
-          spots: [
-            `${name}の定番スポット（例）`,
-            `${name}で外せない景色（例）`,
-            `${name}の王道コース（例）`
-          ],
-          gourmet: [
-            `${name}の名物グルメ（例）`,
-            `${name}のご当地スイーツ（例）`,
-            `${name}で人気の一皿（例）`
-          ],
-          hidden: [
-            `${name}の穴場スポット（例）`,
-            `${name}ののんびり散歩道（例）`,
-            `${name}の静かな絶景（例）`
-          ]
-        };
-      }
+    const PREF_DATA = {
+      "北海道": { spots: ["札幌・大通公園", "小樽運河", "富良野・美瑛"], gourmet: ["ジンギスカン", "海鮮丼", "スープカレー"] },
+      "青森県": { spots: ["弘前城", "奥入瀬渓流", "ねぶたの家 ワ・ラッセ"], gourmet: ["りんごスイーツ", "せんべい汁", "ホタテ料理"] },
+      "岩手県": { spots: ["中尊寺（金色堂）", "龍泉洞", "小岩井農場"], gourmet: ["わんこそば", "盛岡冷麺", "じゃじゃ麺"] },
+      "宮城県": { spots: ["松島", "仙台城跡（青葉城）", "秋保温泉"], gourmet: ["牛たん", "ずんだ餅", "笹かまぼこ"] },
+      "秋田県": { spots: ["田沢湖", "角館武家屋敷", "男鹿半島"], gourmet: ["きりたんぽ鍋", "稲庭うどん", "いぶりがっこ"] },
+      "山形県": { spots: ["山寺（立石寺）", "銀山温泉", "蔵王樹氷"], gourmet: ["芋煮", "さくらんぼ", "米沢牛"] },
+      "福島県": { spots: ["鶴ヶ城", "大内宿", "五色沼"], gourmet: ["喜多方ラーメン", "ソースカツ丼", "桃"] },
 
-      // 例として少しだけ“それっぽい”サンプルを入れておきます（編集のヒント用）
-      obj["東京都"] = {
-        spots: ["浅草・東京スカイツリー周辺", "上野の美術館＆公園散策", "夜景：お台場・東京タワー"],
-        gourmet: ["もんじゃ焼き（下町）", "寿司（市場・名店）", "ラーメン（激戦区めぐり）"],
-        hidden: ["谷中の路地さんぽ", "清澄白河のカフェ巡り", "神楽坂の小道探索"]
-      };
-      obj["大阪府"] = {
-        spots: ["道頓堀〜なんば散策", "大阪城公園", "海遊館＆ベイエリア"],
-        gourmet: ["たこ焼き", "お好み焼き", "串カツ"],
-        hidden: ["中之島の建築＆川沿い", "空中庭園（夕方）", "レトロ商店街めぐり"]
-      };
-      obj["沖縄県"] = {
-        spots: ["美ら海水族館", "海の絶景ビーチ", "首里城周辺の歴史散策"],
-        gourmet: ["沖縄そば", "ゴーヤーチャンプルー", "サーターアンダギー"],
-        hidden: ["夕暮れのサンセットスポット", "ローカル市場の食べ歩き", "静かな離島日帰り"]
-      };
+      "茨城県": { spots: ["国営ひたち海浜公園", "偕楽園", "大洗磯前神社"], gourmet: ["あんこう鍋", "納豆料理", "常陸牛"] },
+      "栃木県": { spots: ["日光東照宮", "中禅寺湖", "あしかがフラワーパーク"], gourmet: ["宇都宮餃子", "いちご（とちあいか等）", "佐野ラーメン"] },
+      "群馬県": { spots: ["草津温泉", "伊香保温泉", "富岡製糸場"], gourmet: ["水沢うどん", "焼きまんじゅう", "おっきりこみ"] },
+      "埼玉県": { spots: ["川越（小江戸）", "秩父・長瀞", "鉄道博物館"], gourmet: ["わらじかつ", "武蔵野うどん", "草加せんべい"] },
+      "千葉県": { spots: ["東京ディズニーリゾート周辺", "鴨川シーワールド", "鋸山"], gourmet: ["落花生", "なめろう", "房総の海鮮"] },
+      "東京都": { spots: ["浅草・東京スカイツリー周辺", "上野公園・美術館", "お台場・夜景"], gourmet: ["寿司", "もんじゃ焼き", "ラーメン"] },
+      "神奈川県": { spots: ["鎌倉（大仏・寺社）", "箱根（温泉・芦ノ湖）", "横浜みなとみらい"], gourmet: ["しらす丼", "中華街グルメ", "小田原かまぼこ"] },
 
-      return obj;
-    })();
+      "新潟県": { spots: ["佐渡島", "清津峡", "越後湯沢"], gourmet: ["へぎそば", "日本酒", "のどぐろ"] },
+      "富山県": { spots: ["黒部ダム", "立山黒部アルペンルート", "五箇山合掌造り"], gourmet: ["ます寿し", "白えび", "氷見うどん"] },
+      "石川県": { spots: ["兼六園", "ひがし茶屋街", "金沢21世紀美術館"], gourmet: ["海鮮（のどぐろ等）", "金沢カレー", "和菓子"] },
+      "福井県": { spots: ["東尋坊", "福井県立恐竜博物館", "永平寺"], gourmet: ["越前がに", "おろしそば", "ソースカツ丼"] },
+      "山梨県": { spots: ["河口湖", "富士山五合目周辺", "昇仙峡"], gourmet: ["ほうとう", "ぶどう", "ワイン"] },
+      "長野県": { spots: ["上高地", "善光寺", "白馬"], gourmet: ["信州そば", "おやき", "野沢菜"] },
+
+      "岐阜県": { spots: ["白川郷", "高山古い町並", "下呂温泉"], gourmet: ["飛騨牛", "朴葉味噌", "鶏ちゃん"] },
+      "静岡県": { spots: ["伊豆（温泉・海）", "三保の松原", "浜名湖周辺"], gourmet: ["うなぎ", "静岡おでん", "お茶スイーツ"] },
+      "愛知県": { spots: ["名古屋城", "犬山城", "熱田神宮"], gourmet: ["味噌カツ", "ひつまぶし", "手羽先"] },
+      "三重県": { spots: ["伊勢神宮", "鳥羽・志摩", "なばなの里"], gourmet: ["伊勢うどん", "松阪牛", "てこね寿司"] },
+
+      "滋賀県": { spots: ["琵琶湖", "彦根城", "近江八幡"], gourmet: ["近江牛", "鮒ずし", "赤こんにゃく"] },
+      "京都府": { spots: ["清水寺", "伏見稲荷大社", "嵐山"], gourmet: ["湯豆腐", "抹茶スイーツ", "京料理"] },
+      "大阪府": { spots: ["道頓堀〜なんば", "大阪城公園", "海遊館"], gourmet: ["たこ焼き", "お好み焼き", "串カツ"] },
+      "兵庫県": { spots: ["姫路城", "神戸ハーバーランド", "有馬温泉"], gourmet: ["神戸牛", "明石焼き", "淡路島たまねぎ"] },
+      "奈良県": { spots: ["東大寺", "奈良公園", "法隆寺"], gourmet: ["柿の葉寿司", "三輪そうめん", "奈良漬"] },
+      "和歌山県": { spots: ["高野山", "白浜温泉", "熊野古道"], gourmet: ["梅干し", "みかん", "しらす"] },
+
+      "鳥取県": { spots: ["鳥取砂丘", "三徳山三佛寺", "水木しげるロード"], gourmet: ["松葉がに", "二十世紀梨", "牛骨ラーメン"] },
+      "島根県": { spots: ["出雲大社", "石見銀山", "松江城"], gourmet: ["出雲そば", "しじみ汁", "のどぐろ"] },
+      "岡山県": { spots: ["倉敷美観地区", "岡山後楽園", "牛窓（瀬戸内）"], gourmet: ["桃", "ままかり", "デミカツ丼"] },
+      "広島県": { spots: ["厳島神社（宮島）", "平和記念公園", "尾道"], gourmet: ["広島お好み焼き", "牡蠣", "もみじ饅頭"] },
+      "山口県": { spots: ["錦帯橋", "角島大橋", "秋吉台"], gourmet: ["ふぐ料理", "瓦そば", "岩国寿司"] },
+
+      "徳島県": { spots: ["鳴門の渦潮", "大歩危・小歩危", "阿波おどり会館"], gourmet: ["徳島ラーメン", "阿波尾鶏", "すだち"] },
+      "香川県": { spots: ["栗林公園", "小豆島", "金刀比羅宮"], gourmet: ["讃岐うどん", "骨付鳥", "しょうゆ豆"] },
+      "愛媛県": { spots: ["道後温泉", "松山城", "しまなみ海道"], gourmet: ["鯛めし", "じゃこ天", "みかん"] },
+      "高知県": { spots: ["桂浜", "四万十川", "ひろめ市場"], gourmet: ["カツオのたたき", "文旦", "土佐あかうし"] },
+
+      "福岡県": { spots: ["太宰府天満宮", "博多・中洲", "門司港レトロ"], gourmet: ["博多ラーメン", "もつ鍋", "明太子"] },
+      "佐賀県": { spots: ["吉野ヶ里遺跡", "有田・伊万里", "嬉野温泉"], gourmet: ["佐賀牛", "嬉野茶", "呼子のイカ（近郊）"] },
+      "長崎県": { spots: ["ハウステンボス", "グラバー園", "軍艦島"], gourmet: ["ちゃんぽん", "皿うどん", "カステラ"] },
+      "熊本県": { spots: ["熊本城", "阿蘇", "黒川温泉"], gourmet: ["馬刺し", "辛子れんこん", "熊本ラーメン"] },
+      "大分県": { spots: ["別府温泉", "由布院", "九重“夢”大吊橋"], gourmet: ["とり天", "だんご汁", "関あじ・関さば"] },
+      "宮崎県": { spots: ["高千穂峡", "青島神社", "日南海岸"], gourmet: ["チキン南蛮", "地鶏炭火焼", "マンゴー"] },
+      "鹿児島県": { spots: ["桜島", "屋久島", "霧島温泉"], gourmet: ["黒豚", "さつま揚げ", "白熊（かき氷）"] },
+      "沖縄県": { spots: ["美ら海水族館", "首里城周辺", "絶景ビーチ"], gourmet: ["沖縄そば", "ゴーヤーチャンプルー", "サーターアンダギー"] }
+    };
 
     /***********************
      * 3) UI参照
@@ -526,7 +349,6 @@
     /***********************
      * 4) 地図読み込み（SVG）
      ***********************/
-    // GeoloniaのSVGを利用（map-full / map-mobile）
     const MAP_URL_DESKTOP = "https://raw.githubusercontent.com/geolonia/japanese-prefectures/master/map-full.svg";
     const MAP_URL_MOBILE  = "https://raw.githubusercontent.com/geolonia/japanese-prefectures/master/map-mobile.svg";
 
@@ -546,22 +368,20 @@
         if(!res.ok) throw new Error("SVG fetch failed: " + res.status);
         const svgText = await res.text();
 
-        // 挿入
         mapContainer.innerHTML = svgText;
 
-        // SVGにID付与（svg-pan-zoomが掴みやすいように）
         const svg = mapContainer.querySelector("svg");
         if(!svg) throw new Error("SVG not found in response");
         svg.id = "jpMapSvg";
         svg.setAttribute("aria-label", "日本地図（都道府県クリック）");
         svg.setAttribute("role", "img");
 
-        // クリック対象を取得（Geolonia SVGは .prefecture を持つ）
         const prefectures = mapContainer.querySelectorAll(".geolonia-svg-map .prefecture");
         prefectures.forEach(prefEl => {
-          // タイトル/アクセシビリティ
-          const code = prefEl.dataset.code?.padStart(2,"0");
+          const raw = prefEl.dataset.code;
+          const code = raw ? String(raw).padStart(2,"0") : null;
           const name = code ? CODE_TO_NAME[code] : null;
+
           if(name){
             prefEl.setAttribute("tabindex","0");
             prefEl.setAttribute("role","button");
@@ -574,7 +394,6 @@
             selectPrefecture(prefEl);
           });
 
-          // Enter/Spaceでも選べる
           prefEl.addEventListener("keydown", (e) => {
             if(e.key === "Enter" || e.key === " "){
               e.preventDefault();
@@ -583,7 +402,6 @@
           });
         });
 
-        // pan/zoom 初期化
         if (panZoom) { try { panZoom.destroy(); } catch(_){} }
         panZoom = svgPanZoom("#jpMapSvg", {
           zoomEnabled: true,
@@ -598,7 +416,6 @@
           preventMouseEventsDefault: true,
         });
 
-        // 最初はフィット
         setTimeout(() => {
           panZoom.resize();
           panZoom.fit();
@@ -621,7 +438,7 @@
     }
 
     /***********************
-     * 5) 選択表示（右パネル or モーダル）
+     * 5) 選択表示
      ***********************/
     function renderList(ul, items){
       ul.innerHTML = "";
@@ -638,7 +455,6 @@
     }
     function openMaps(prefName){
       const q = encodeURIComponent(prefName);
-      // “都道府県のページ”に近い体験として、検索を開きます
       window.open("https://www.google.com/maps/search/?api=1&query=" + q, "_blank", "noopener");
     }
 
@@ -651,28 +467,35 @@
       btnMaps.style.cursor = enabled ? "pointer" : "not-allowed";
     }
 
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
     function selectPrefecture(prefEl){
-      const code = prefEl.dataset.code?.padStart(2,"0");
+      const raw = prefEl.dataset.code;
+      const code = raw ? String(raw).padStart(2,"0") : null;
       const name = code ? CODE_TO_NAME[code] : null;
       if(!name) return;
 
-      // activeクラス
       if(currentPrefEl) currentPrefEl.classList.remove("active");
       currentPrefEl = prefEl;
       currentPrefEl.classList.add("active");
 
       currentPrefName = name;
 
-      const data = PREF_DATA[name] || { spots: [], gourmet: [], hidden: [] };
+      const data = PREF_DATA[name] || { spots: ["（データ未設定）"], gourmet: ["（データ未設定）"] };
 
-      // desktop panel更新
       prefNameEl.textContent = name;
       prefSubEl.textContent = "気になるところから、次の旅を決めよう。";
       renderList(spotsEl, data.spots);
       renderList(gourmetEl, data.gourmet);
       setButtonsEnabled(true);
 
-      // mobile: bottom sheetを出す（見やすさ優先）
       if(isMobileUI()){
         sheetPrefName.textContent = name;
         sheetContent.innerHTML = `
@@ -690,20 +513,9 @@
           </div>
         `;
         sheetBackdrop.classList.add("show");
-
-        // シート内ボタン
         $("#sheetSearch", sheetContent).onclick = () => openGoogle(name);
         $("#sheetMaps", sheetContent).onclick   = () => openMaps(name);
       }
-    }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
     }
 
     /***********************
@@ -739,16 +551,14 @@
     });
 
     /***********************
-     * 9) リサイズ時：SVG切替＆再初期化
+     * 9) リサイズでSVG切替
      ***********************/
     let lastIsMobile = isMobileUI();
     window.addEventListener("resize", () => {
       const now = isMobileUI();
       if(now !== lastIsMobile){
         lastIsMobile = now;
-        // モバイル用SVG/PC用SVGを切り替えたいので再ロード
         loadMap().then(() => {
-          // 直前に選択があれば、同じ都道府県を再選択（見た目を復元）
           if(currentPrefName){
             const code = Object.entries(CODE_TO_NAME).find(([,n]) => n === currentPrefName)?.[0];
             if(code){
