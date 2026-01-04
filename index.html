@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>日本地図 クリック観光ナビ</title>
+  <meta name="description" content="都道府県をクリックして観光情報をチェック。Google検索＆Googleマップへワンタップ。" />
+  <style>
+    :root{
+      --bg:#ffffff;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --shadow: 0 10px 25px rgba(15, 23, 42, .08);
+      --green:#a6ce39;
+      --greenHover:#c1e16c;
+      --greenActive:#7fb800;
+      --stroke:#ffffff;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a{color:inherit}
+    .app{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+    header{
+      padding:18px 16px 10px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(166,206,57,.14), rgba(166,206,57,0));
+    }
+    .header-inner{
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+    }
+    .hint{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+      padding-top:2px;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:999px;background:var(--green);
+      box-shadow:0 0 0 4px rgba(166,206,57,.18);
+      flex:0 0 auto;
+    }
+
+    main{
+      max-width:1100px;
+      width:100%;
+      margin:0 auto;
+      padding:14px 16px 22px;
+      display:grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap:14px;
+      flex:1;
+    }
+
+    /* Map card */
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .map-card{
+      position:relative;
+      min-height:480px;
+    }
+    .map-topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px 12px 10px;
+      border-bottom:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      backdrop-filter: blur(6px);
+    }
+    .map-title{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .map-title strong{font-size:13px}
+    .map-title span{font-size:12px;color:var(--muted)}
+    .map-tools{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:13px;
+      cursor:pointer;
+      transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+      box-shadow: 0 4px 12px rgba(15,23,42,.06);
+      user-select:none;
+    }
+    .btn:active{transform: translateY(1px)}
+    .btn.primary{
+      border-color: rgba(166,206,57,.35);
+      background: rgba(166,206,57,.16);
+    }
+    .btn.icon{
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      padding:0;
+      font-weight:700;
+    }
+    .btn:focus{outline: 3px solid rgba(59,130,246,.25); outline-offset:2px}
+
+    .map-stage{
+      position:absolute;
+      inset:56px 0 0 0;
+      display:grid;
+      place-items:center;
+      background:#fff;
+    }
+    #mapContainer{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      touch-action:none; /* svg-pan-zoom uses pointer/touch */
+    }
+    .loader{
+      display:flex; flex-direction:column; gap:10px;
+      align-items:center; justify-content:center;
+      color:var(--muted);
+      font-size:13px;
+      padding:18px;
+    }
+    .spinner{
+      width:28px;height:28px;border-radius:999px;
+      border:3px solid rgba(15,23,42,.12);
+      border-top-color: rgba(166,206,57,.9);
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Geolonia SVG styling */
+    .geolonia-svg-map{
+      width:100%;
+      height:100%;
+      display:block;
+      background:#fff;
+    }
+    /* prefecture group */
+    .geolonia-svg-map .prefecture{
+      fill: var(--green);
+      stroke: var(--stroke);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+      cursor:pointer;
+      transition: fill .15s ease;
+    }
+    .geolonia-svg-map .prefecture:hover{ fill: var(--greenHover); }
+    .geolonia-svg-map .prefecture.active{ fill: var(--greenActive); }
+
+    /* boundary lines if present */
+    .geolonia-svg-map .boundary-line{
+      stroke: var(--stroke);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+      pointer-events:none;
+    }
+
+    /* Info panel */
+    .info-card{
+      display:flex;
+      flex-direction:column;
+      min-height:480px;
+    }
+    .info-head{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--line);
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .badge .pin{
+      width:8px;height:8px;border-radius:999px;background:var(--green);
+      box-shadow:0 0 0 4px rgba(166,206,57,.16);
+    }
+    .pref-name{
+      margin:10px 0 2px;
+      font-size:20px;
+      letter-spacing:.2px;
+    }
+    .pref-sub{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .info-body{
+      padding:12px 14px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      flex:1;
+    }
+    .section{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 12px;
+      background: #fff;
+    }
+    .section h3{
+      margin:0 0 8px;
+      font-size:13px;
+      color: var(--text);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .section h3 small{
+      font-weight:600;
+      color: var(--muted);
+    }
+    ul{
+      margin:0;
+      padding-left:18px;
+      color: var(--text);
+      font-size:13px;
+      line-height:1.55;
+    }
+    li{margin:4px 0}
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:auto;
+      padding-top:4px;
+      flex-wrap:wrap;
+    }
+    .actions .btn{
+      flex:1 1 170px;
+      justify-content:center;
+      text-align:center;
+    }
+
+    footer{
+      max-width:1100px;
+      width:100%;
+      margin:0 auto;
+      padding:0 16px 18px;
+      color: var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    /* Mobile layout */
+    @media (max-width: 920px){
+      main{grid-template-columns: 1fr; }
+      .map-card{min-height:420px}
+      .info-card{min-height:auto}
+    }
+
+    /* Bottom sheet (mobile) */
+    .sheet-backdrop{
+      position:fixed;
+      inset:0;
+      background: rgba(2,6,23,.45);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding:12px;
+      z-index:50;
+    }
+    .sheet{
+      width:min(720px, 100%);
+      max-height: 88vh;
+      overflow:auto;
+      background:#fff;
+      border-radius: 18px;
+      border:1px solid rgba(226,232,240,.9);
+      box-shadow: 0 18px 50px rgba(2,6,23,.35);
+    }
+    .sheet .sheet-top{
+      position:sticky;
+      top:0;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(8px);
+      border-bottom:1px solid var(--line);
+      padding:10px 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      z-index:1;
+    }
+    .sheet .close{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      width:40px;height:40px;
+      display:grid;place-items:center;
+      cursor:pointer;
+      font-size:18px;
+    }
+    .sheet .content{
+      padding:12px;
+    }
+    .show{display:flex}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="header-inner">
+        <div class="brand">
+          <h1>日本地図 クリック観光ナビ</h1>
+          <p>都道府県をクリック → 名所＆グルメ → Google検索／マップへ一発。</p>
+        </div>
+        <div class="hint" aria-hidden="true">
+          <span class="dot"></span>
+          <span>ホイール/ピンチでズーム・ドラッグで移動</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- MAP -->
+      <section class="card map-card" aria-label="日本地図">
+        <div class="map-topbar">
+          <div class="map-title">
+            <strong>日本地図</strong>
+            <span>都道府県をクリックしてください</span>
+          </div>
+          <div class="map-tools">
+            <button class="btn icon" id="zoomOut" title="縮小" aria-label="縮小">−</button>
+            <button class="btn icon" id="zoomIn" title="拡大" aria-label="拡大">＋</button>
+            <button class="btn primary" id="resetView" title="リセット">リセット</button>
+          </div>
+        </div>
+        <div class="map-stage">
+          <div id="mapContainer">
+            <div class="loader" id="loading">
+              <div class="spinner" aria-hidden="true"></div>
+              <div>地図を読み込み中…</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INFO (desktop panel) -->
+      <aside class="card info-card" aria-label="都道府県の観光情報" id="infoPanel">
+        <div class="info-head">
+          <div class="badge"><span class="pin"></span><span>いまの気分に合う旅先を探そう</span></div>
+          <h2 class="pref-name" id="prefName">都道府県を選択</h2>
+          <p class="pref-sub" id="prefSub">地図をクリックすると、名所とグルメが表示されます。</p>
+        </div>
+
+        <div class="info-body">
+          <div class="section">
+            <h3>【名所】 <small>おすすめ3つ</small></h3>
+            <ul id="spots"></ul>
+          </div>
+
+          <div class="section">
+            <h3>【グルメ】 <small>おすすめ3つ</small></h3>
+            <ul id="gourmet"></ul>
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="googleSearch" disabled>Googleで観光情報を検索</button>
+            <button class="btn" id="googleMaps" disabled>Googleマップで場所を確認</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div>
+        ※地図は外部SVG（GitHub上の公開データ）を読み込んで表示します。<br/>
+        ※ダミーデータはこのHTML内の <code>PREF_DATA</code> を編集して差し替えできます。
+      </div>
+    </footer>
+  </div>
+
+  <!-- Bottom sheet (mobile) -->
+  <div class="sheet-backdrop" id="sheetBackdrop" role="dialog" aria-modal="true" aria-label="都道府県の観光情報（モバイル）">
+    <div class="sheet">
+      <div class="sheet-top">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <strong id="sheetPrefName">都道府県</strong>
+          <span style="color:#64748b;font-size:12px;">名所＆グルメをサクッとチェック</span>
+        </div>
+        <button class="close" id="sheetClose" aria-label="閉じる">×</button>
+      </div>
+      <div class="content" id="sheetContent"></div>
+    </div>
+  </div>
+
+  <!-- svg-pan-zoom -->
+  <script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script>
+
+  <script>
+    /***********************
+     * 1) 都道府県マスタ
+     ***********************/
+    const PREF_LIST = [
+      ["01","北海道"],["02","青森県"],["03","岩手県"],["04","宮城県"],["05","秋田県"],["06","山形県"],["07","福島県"],
+      ["08","茨城県"],["09","栃木県"],["10","群馬県"],["11","埼玉県"],["12","千葉県"],["13","東京都"],["14","神奈川県"],
+      ["15","新潟県"],["16","富山県"],["17","石川県"],["18","福井県"],["19","山梨県"],["20","長野県"],
+      ["21","岐阜県"],["22","静岡県"],["23","愛知県"],["24","三重県"],
+      ["25","滋賀県"],["26","京都府"],["27","大阪府"],["28","兵庫県"],["29","奈良県"],["30","和歌山県"],
+      ["31","鳥取県"],["32","島根県"],["33","岡山県"],["34","広島県"],["35","山口県"],
+      ["36","徳島県"],["37","香川県"],["38","愛媛県"],["39","高知県"],
+      ["40","福岡県"],["41","佐賀県"],["42","長崎県"],["43","熊本県"],["44","大分県"],["45","宮崎県"],["46","鹿児島県"],
+      ["47","沖縄県"]
+    ];
+
+    const CODE_TO_NAME = Object.fromEntries(PREF_LIST);
+
+    /****************************************************************
+     * 2) 観光データ（ダミー）
+     *  - ここを後であなたが好きな内容に差し替えできます
+     *  - 表示は【名所】【グルメ】のみ（必要なら "hidden" も活用OK）
+     ****************************************************************/
+    const PREF_DATA = (() => {
+      const obj = {};
+      for (const [, name] of PREF_LIST) {
+        obj[name] = {
+          spots: [
+            `${name}の定番スポット（例）`,
+            `${name}で外せない景色（例）`,
+            `${name}の王道コース（例）`
+          ],
+          gourmet: [
+            `${name}の名物グルメ（例）`,
+            `${name}のご当地スイーツ（例）`,
+            `${name}で人気の一皿（例）`
+          ],
+          hidden: [
+            `${name}の穴場スポット（例）`,
+            `${name}ののんびり散歩道（例）`,
+            `${name}の静かな絶景（例）`
+          ]
+        };
+      }
+
+      // 例として少しだけ“それっぽい”サンプルを入れておきます（編集のヒント用）
+      obj["東京都"] = {
+        spots: ["浅草・東京スカイツリー周辺", "上野の美術館＆公園散策", "夜景：お台場・東京タワー"],
+        gourmet: ["もんじゃ焼き（下町）", "寿司（市場・名店）", "ラーメン（激戦区めぐり）"],
+        hidden: ["谷中の路地さんぽ", "清澄白河のカフェ巡り", "神楽坂の小道探索"]
+      };
+      obj["大阪府"] = {
+        spots: ["道頓堀〜なんば散策", "大阪城公園", "海遊館＆ベイエリア"],
+        gourmet: ["たこ焼き", "お好み焼き", "串カツ"],
+        hidden: ["中之島の建築＆川沿い", "空中庭園（夕方）", "レトロ商店街めぐり"]
+      };
+      obj["沖縄県"] = {
+        spots: ["美ら海水族館", "海の絶景ビーチ", "首里城周辺の歴史散策"],
+        gourmet: ["沖縄そば", "ゴーヤーチャンプルー", "サーターアンダギー"],
+        hidden: ["夕暮れのサンセットスポット", "ローカル市場の食べ歩き", "静かな離島日帰り"]
+      };
+
+      return obj;
+    })();
+
+    /***********************
+     * 3) UI参照
+     ***********************/
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const mapContainer = $("#mapContainer");
+    const loading = $("#loading");
+
+    const prefNameEl = $("#prefName");
+    const prefSubEl = $("#prefSub");
+    const spotsEl = $("#spots");
+    const gourmetEl = $("#gourmet");
+    const btnSearch = $("#googleSearch");
+    const btnMaps = $("#googleMaps");
+
+    const sheetBackdrop = $("#sheetBackdrop");
+    const sheetClose = $("#sheetClose");
+    const sheetPrefName = $("#sheetPrefName");
+    const sheetContent = $("#sheetContent");
+
+    /***********************
+     * 4) 地図読み込み（SVG）
+     ***********************/
+    // GeoloniaのSVGを利用（map-full / map-mobile）
+    const MAP_URL_DESKTOP = "https://raw.githubusercontent.com/geolonia/japanese-prefectures/master/map-full.svg";
+    const MAP_URL_MOBILE  = "https://raw.githubusercontent.com/geolonia/japanese-prefectures/master/map-mobile.svg";
+
+    let panZoom = null;
+    let currentPrefEl = null;
+    let currentPrefName = null;
+
+    function isMobileUI(){
+      return window.matchMedia("(max-width: 920px)").matches;
+    }
+
+    async function loadMap(){
+      try{
+        loading.style.display = "flex";
+        const url = isMobileUI() ? MAP_URL_MOBILE : MAP_URL_DESKTOP;
+        const res = await fetch(url, { cache: "force-cache" });
+        if(!res.ok) throw new Error("SVG fetch failed: " + res.status);
+        const svgText = await res.text();
+
+        // 挿入
+        mapContainer.innerHTML = svgText;
+
+        // SVGにID付与（svg-pan-zoomが掴みやすいように）
+        const svg = mapContainer.querySelector("svg");
+        if(!svg) throw new Error("SVG not found in response");
+        svg.id = "jpMapSvg";
+        svg.setAttribute("aria-label", "日本地図（都道府県クリック）");
+        svg.setAttribute("role", "img");
+
+        // クリック対象を取得（Geolonia SVGは .prefecture を持つ）
+        const prefectures = mapContainer.querySelectorAll(".geolonia-svg-map .prefecture");
+        prefectures.forEach(prefEl => {
+          // タイトル/アクセシビリティ
+          const code = prefEl.dataset.code?.padStart(2,"0");
+          const name = code ? CODE_TO_NAME[code] : null;
+          if(name){
+            prefEl.setAttribute("tabindex","0");
+            prefEl.setAttribute("role","button");
+            prefEl.setAttribute("aria-label", name + "を選択");
+          }
+
+          prefEl.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectPrefecture(prefEl);
+          });
+
+          // Enter/Spaceでも選べる
+          prefEl.addEventListener("keydown", (e) => {
+            if(e.key === "Enter" || e.key === " "){
+              e.preventDefault();
+              selectPrefecture(prefEl);
+            }
+          });
+        });
+
+        // pan/zoom 初期化
+        if (panZoom) { try { panZoom.destroy(); } catch(_){} }
+        panZoom = svgPanZoom("#jpMapSvg", {
+          zoomEnabled: true,
+          controlIconsEnabled: false,
+          fit: true,
+          center: true,
+          minZoom: 1,
+          maxZoom: 18,
+          zoomScaleSensitivity: 0.25,
+          dblClickZoomEnabled: true,
+          mouseWheelZoomEnabled: true,
+          preventMouseEventsDefault: true,
+        });
+
+        // 最初はフィット
+        setTimeout(() => {
+          panZoom.resize();
+          panZoom.fit();
+          panZoom.center();
+        }, 0);
+
+      }catch(err){
+        console.error(err);
+        mapContainer.innerHTML = `
+          <div class="loader" style="padding:22px;">
+            <div style="font-weight:700;color:#0f172a">地図の読み込みに失敗しました</div>
+            <div style="max-width:520px;text-align:center;">
+              ネットワーク環境をご確認ください（GitHubのSVGを読み込みます）。
+            </div>
+          </div>
+        `;
+      }finally{
+        loading.style.display = "none";
+      }
+    }
+
+    /***********************
+     * 5) 選択表示（右パネル or モーダル）
+     ***********************/
+    function renderList(ul, items){
+      ul.innerHTML = "";
+      (items || []).slice(0,3).forEach(text => {
+        const li = document.createElement("li");
+        li.textContent = text;
+        ul.appendChild(li);
+      });
+    }
+
+    function openGoogle(prefName){
+      const q = encodeURIComponent(prefName + " 観光 おすすめ");
+      window.open("https://www.google.com/search?q=" + q, "_blank", "noopener");
+    }
+    function openMaps(prefName){
+      const q = encodeURIComponent(prefName);
+      // “都道府県のページ”に近い体験として、検索を開きます
+      window.open("https://www.google.com/maps/search/?api=1&query=" + q, "_blank", "noopener");
+    }
+
+    function setButtonsEnabled(enabled){
+      btnSearch.disabled = !enabled;
+      btnMaps.disabled = !enabled;
+      btnSearch.style.opacity = enabled ? "1" : ".55";
+      btnMaps.style.opacity = enabled ? "1" : ".55";
+      btnSearch.style.cursor = enabled ? "pointer" : "not-allowed";
+      btnMaps.style.cursor = enabled ? "pointer" : "not-allowed";
+    }
+
+    function selectPrefecture(prefEl){
+      const code = prefEl.dataset.code?.padStart(2,"0");
+      const name = code ? CODE_TO_NAME[code] : null;
+      if(!name) return;
+
+      // activeクラス
+      if(currentPrefEl) currentPrefEl.classList.remove("active");
+      currentPrefEl = prefEl;
+      currentPrefEl.classList.add("active");
+
+      currentPrefName = name;
+
+      const data = PREF_DATA[name] || { spots: [], gourmet: [], hidden: [] };
+
+      // desktop panel更新
+      prefNameEl.textContent = name;
+      prefSubEl.textContent = "気になるところから、次の旅を決めよう。";
+      renderList(spotsEl, data.spots);
+      renderList(gourmetEl, data.gourmet);
+      setButtonsEnabled(true);
+
+      // mobile: bottom sheetを出す（見やすさ優先）
+      if(isMobileUI()){
+        sheetPrefName.textContent = name;
+        sheetContent.innerHTML = `
+          <div class="section" style="margin-bottom:10px;">
+            <h3>【名所】 <small>おすすめ3つ</small></h3>
+            <ul>${(data.spots||[]).slice(0,3).map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>
+          </div>
+          <div class="section" style="margin-bottom:10px;">
+            <h3>【グルメ】 <small>おすすめ3つ</small></h3>
+            <ul>${(data.gourmet||[]).slice(0,3).map(s=>`<li>${escapeHtml(s)}</li>`).join("")}</ul>
+          </div>
+          <div class="actions" style="padding-top:2px;">
+            <button class="btn" id="sheetSearch">Googleで観光情報を検索</button>
+            <button class="btn" id="sheetMaps">Googleマップで場所を確認</button>
+          </div>
+        `;
+        sheetBackdrop.classList.add("show");
+
+        // シート内ボタン
+        $("#sheetSearch", sheetContent).onclick = () => openGoogle(name);
+        $("#sheetMaps", sheetContent).onclick   = () => openMaps(name);
+      }
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /***********************
+     * 6) 右パネルのボタン
+     ***********************/
+    btnSearch.addEventListener("click", () => {
+      if(!currentPrefName) return;
+      openGoogle(currentPrefName);
+    });
+    btnMaps.addEventListener("click", () => {
+      if(!currentPrefName) return;
+      openMaps(currentPrefName);
+    });
+
+    /***********************
+     * 7) ズームUI
+     ***********************/
+    $("#zoomIn").addEventListener("click", () => panZoom && panZoom.zoomIn());
+    $("#zoomOut").addEventListener("click", () => panZoom && panZoom.zoomOut());
+    $("#resetView").addEventListener("click", () => {
+      if(!panZoom) return;
+      panZoom.resetZoom();
+      panZoom.fit();
+      panZoom.center();
+    });
+
+    /***********************
+     * 8) モバイルシート
+     ***********************/
+    sheetClose.addEventListener("click", () => sheetBackdrop.classList.remove("show"));
+    sheetBackdrop.addEventListener("click", (e) => {
+      if(e.target === sheetBackdrop) sheetBackdrop.classList.remove("show");
+    });
+
+    /***********************
+     * 9) リサイズ時：SVG切替＆再初期化
+     ***********************/
+    let lastIsMobile = isMobileUI();
+    window.addEventListener("resize", () => {
+      const now = isMobileUI();
+      if(now !== lastIsMobile){
+        lastIsMobile = now;
+        // モバイル用SVG/PC用SVGを切り替えたいので再ロード
+        loadMap().then(() => {
+          // 直前に選択があれば、同じ都道府県を再選択（見た目を復元）
+          if(currentPrefName){
+            const code = Object.entries(CODE_TO_NAME).find(([,n]) => n === currentPrefName)?.[0];
+            if(code){
+              const el = mapContainer.querySelector(`.geolonia-svg-map .prefecture[data-code="${parseInt(code,10)}"], .geolonia-svg-map .prefecture[data-code="${code}"]`);
+              if(el) selectPrefecture(el);
+            }
+          }
+        });
+      }
+    });
+
+    /***********************
+     * 起動
+     ***********************/
+    setButtonsEnabled(false);
+    loadMap();
+  </script>
+</body>
+</html>
